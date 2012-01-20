@@ -1,0 +1,19 @@
+#!/bin/bash -e
+
+cat <<EOF
+Source: ${SOURCE_NAME}
+Section: admin
+Priority: extra
+Maintainer: $(git config user.name) <$(git config user.email)>
+Standards-Version: 3.9.2
+
+Package: ${PACKAGE_NAME}
+Architecture: all
+Description: ${PACKAGE_NAME}
+EOF
+
+if [ -e ${PACKAGE_DIR}/depends ]
+then
+	echo -n "Depends: "
+	sed "s/$/,/" ${PACKAGE_DIR}/depends | xargs
+fi

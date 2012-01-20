@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+cat <<EOF
+#!/bin/sh
+
+set -e
+
+EOF
+. debian/diversions.sh
+cat <<EOF
+case "\$1" in
+	install|upgrade)
+EOF
+do_diversions "s,^([^[:space:]]+)[[:space:]]+([^[:space:]]+),\t\tdiversion_\2 /\1,"
+cat <<EOF
+	;;
+
+	abort-upgrade)
+	;;
+
+	*)
+		echo "preinst called with unknown argument '\$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+EOF

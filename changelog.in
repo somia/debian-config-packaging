@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+cat <<EOF
+${SOURCE_NAME} (${PACKAGE_VERSION}) unstable; urgency=low
+
+$(git log -10 --pretty=format:"  * %H %s" ${PACKAGE_COMMIT})
+
+ -- $(git config user.name) <$(git config user.email)>  $(date -R)
+EOF

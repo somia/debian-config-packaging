@@ -1,0 +1,4 @@
+#!/bin/bash -e
+
+cd ${PACKAGE_DIR}
+find * -mindepth 1 -not -type d -printf "${PACKAGE_DIR}/%p %h\n"

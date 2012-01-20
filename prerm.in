@@ -1,0 +1,30 @@
+#!/bin/bash -e
+
+cat <<EOF
+#!/bin/sh
+
+set -e
+
+EOF
+. debian/keys.sh
+cat <<EOF
+case "\$1" in
+	remove|purge)
+EOF
+do_keys del
+cat <<EOF
+	;;
+
+	upgrade|deconfigure|failed-upgrade)
+	;;
+
+	*)
+		echo "prerm called with unknown argument '\$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+EOF

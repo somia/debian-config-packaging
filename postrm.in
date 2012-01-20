@@ -1,0 +1,32 @@
+#!/bin/bash -e
+
+cat <<EOF
+#!/bin/sh
+
+set -e
+
+EOF
+. debian/diversions.sh
+. debian/services.sh
+cat <<EOF
+case "\$1" in
+	upgrade|failed-upgrade|abort-upgrade)
+	;;
+
+	remove|purge|abort-install|disappear)
+EOF
+do_diversions "s,^([^[:space:]]+)[[:space:]].*$,\t\tdiversion_remove /\1,"
+do_services
+cat <<EOF
+	;;
+
+	*)
+		echo "postrm called with unknown argument '\$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+EOF

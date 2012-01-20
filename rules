@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+binary: $(patsubst %.in,%,$(wildcard debian/*.in))
+	dh_install
+	test ! -d $(PACKAGE_DIR)/etc/init.d || dh_installinit --onlyscripts $(patsubst %,--name=%,$(notdir $(wildcard $(PACKAGE_DIR)/etc/init.d/*)))
+	dh_installdeb
+	rm -f debian/$(PACKAGE_NAME)/DEBIAN/conffiles
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+debian/%: debian/%.in
+	$@.in > $@ || (rm -f $@; false)

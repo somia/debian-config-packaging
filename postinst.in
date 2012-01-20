@@ -1,0 +1,32 @@
+#!/bin/bash -e
+
+cat <<EOF
+#!/bin/sh
+
+set -e
+
+EOF
+. debian/keys.sh
+. debian/services.sh
+cat <<EOF
+case "\$1" in
+	configure)
+EOF
+do_keys add
+do_services
+cat <<EOF
+	;;
+
+	abort-upgrade|abort-remove|abort-deconfigure)
+	;;
+
+	*)
+		echo "postinst called with unknown argument '\$1'" >&2
+		exit 1
+	;;
+esac
+
+#DEBHELPER#
+
+exit 0
+EOF
