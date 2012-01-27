@@ -4,6 +4,7 @@ PACKAGE_DIRS	?= $(filter-out debian,$(shell git ls-files -- */ | cut -d/ -f1 | s
 build:: $(patsubst %,build-%,$(PACKAGE_DIRS))
 
 build-%::
+	test ! -e $(@:build-%=%)/Makefile || $(MAKE) -C $(@:build-%=%)
 	$(MAKE) -f debian/package.mk SOURCE_NAME=$(SOURCE_NAME) PACKAGE_DIR=$(@:build-%=%)
 
 clean::
