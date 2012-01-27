@@ -7,7 +7,7 @@ binary: $(patsubst %.in,%,$(wildcard debian/*.in))
 	rm -f debian/$(PACKAGE_NAME)/DEBIAN/conffiles
 	dh_gencontrol
 	dh_md5sums
-	dh_builddeb
+	dh_builddeb --destdir=../../packages
 
 debian/%: debian/%.in
 	$@.in > $@ || (rm -f $@; false)
