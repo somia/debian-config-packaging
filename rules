@@ -3,6 +3,7 @@
 binary: $(patsubst %.in,%,$(wildcard debian/*.in))
 	dh_install
 	test ! -d $(PACKAGE_DIR)/etc/init.d || dh_installinit --onlyscripts $(patsubst %,--name=%,$(notdir $(wildcard $(PACKAGE_DIR)/etc/init.d/*)))
+	dh_fixperms
 	dh_installdeb
 	rm -f debian/$(PACKAGE_NAME)/DEBIAN/conffiles
 	dh_gencontrol
