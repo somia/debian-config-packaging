@@ -17,3 +17,9 @@ then
 	echo -n "Depends: "
 	sed "s/$/,/" ${PACKAGE_DIR}/depends | xargs
 fi
+
+if [ -e ${PACKAGE_DIR}/recommends ]
+then
+	echo -n "Recommends: "
+	sed "s/$/,/" ${PACKAGE_DIR}/recommends | xargs
+fi
