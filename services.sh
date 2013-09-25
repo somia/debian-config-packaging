@@ -1,18 +1,40 @@
 cat <<EOF
+inside_chroot() {
+	if ! mountpoint -q /proc || [ "`readlink /proc/self/root`" != "/" ]
+	then
+		return 0
+	else
+		return 1
+	fi
+}
+
 log() {
-	echo "${PACKAGE_NAME}: \$@" | logger
+	if inside_chroot
+	then
+		REDIRECT=
+	else
+		REDIRECT="| logger"
+	fi
+
+	echo "${PACKAGE_NAME}: \$@" \${REDIRECT}
 }
 
 service_restart() {
-	service \$1 restart
-	ret=\$?
+	if inside_chroot
+	then
+		log "INFO: not starting service \$1 in chroot environment"
+		return 0
+	else
+		service \$1 restart
+		ret=\$?
 
-	if [ \$ret -eq 0 ]
-	then log "INFO: service \$1 restarted"
-	else log "ERROR: service \$1 restart failed"
+		if [ \$ret -eq 0 ]
+		then log "INFO: service \$1 restarted"
+		else log "ERROR: service \$1 restart failed"
+		fi
+
+		return \$ret
 	fi
-
-	return \$ret
 }
 
 service_manual() {
