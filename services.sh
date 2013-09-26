@@ -11,12 +11,10 @@ inside_chroot() {
 log() {
 	if inside_chroot
 	then
-		REDIRECT=
+		echo "${PACKAGE_NAME}: \$@" \${REDIRECT}
 	else
-		REDIRECT="| logger"
+		echo "${PACKAGE_NAME}: \$@" \${REDIRECT} | logger
 	fi
-
-	echo "${PACKAGE_NAME}: \$@" \${REDIRECT}
 }
 
 service_restart() {
