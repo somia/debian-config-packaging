@@ -1,5 +1,5 @@
 SOURCE_NAME	?= $(notdir $(PWD))
-PACKAGE_DIRS	?= $(filter-out debian packages,$(shell git ls-files -- */ | cut -d/ -f1 | sort -u))
+PACKAGE_DIRS	?= $(filter-out debian packages,$(shell git ls-files -- */ | cut -d/ -f1 | grep -Fv . | sort -u))
 
 build:: $(patsubst %,build-%,$(PACKAGE_DIRS))
 
